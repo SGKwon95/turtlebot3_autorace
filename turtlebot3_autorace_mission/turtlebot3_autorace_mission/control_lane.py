@@ -88,12 +88,11 @@ class ControlLane(Node):
             return
         
         if self.is_changed_from_yello_to_blue:
-            self.add_vel += 0.2
+            self.add_vel += 0.1
         else:
             self.add_vel = max(1.0, self.add_vel - 0.2)
-        # self.get_logger().info(f'add_vel={self.add_vel}')
 
-        center = desired_center.data * self.add_vel
+        center = desired_center.data
         error = center - 500
 
         Kp = 0.0025
@@ -104,7 +103,7 @@ class ControlLane(Node):
 
         twist = Twist()
         # Linear velocity: adjust speed based on error (maximum 0.05 limit)
-        twist.linear.x = min(self.MAX_VEL * (max(1 - abs(error) / 500, 0) ** 2.2), 0.05)
+        twist.linear.x = min(self.MAX_VEL * (max(1 - abs(error) / 500, 0) ** 2.2) * self.add_vel, 0.4)
         twist.angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
         self.pub_cmd_vel.publish(twist)
 
@@ -123,7 +122,6 @@ class ControlLane(Node):
 
     def callback_lane_changed(self, bool_msg):
         self.is_changed_from_yello_to_blue = bool_msg.data
-        self.get_logger().info(f'파란색={bool_msg.data}')
 
     def shut_down(self):
         self.get_logger().info('Shutting down. cmd_vel will be 0')

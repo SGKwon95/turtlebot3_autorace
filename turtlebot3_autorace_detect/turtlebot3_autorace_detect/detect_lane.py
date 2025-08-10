@@ -279,7 +279,7 @@ class DetectLane(Node):
         # self.get_logger().info(f'fraction: {[white_fraction, yellow_fraction, blue_fraction]}')
 
         try:
-            if blue_fraction > 2500:
+            if blue_fraction > 3000:
                 self.left_fitx, self.left_fit = self.fit_from_lines(
                     self.left_fit, cv_blue_lane)
                 self.mov_avg_left = np.append(
@@ -305,7 +305,7 @@ class DetectLane(Node):
                     self.mov_avg_right, np.array([self.right_fit]), axis=0
                     )
         except Exception:
-            if blue_fraction > 2500:
+            if blue_fraction > 3000:
                 self.left_fitx, self.left_fit = self.sliding_windown(cv_blue_lane, 'left')
                 self.mov_avg_left = np.array([self.left_fit])
                 changed_from_ytob = Bool()
