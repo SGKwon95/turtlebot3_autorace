@@ -58,8 +58,8 @@ def generate_launch_description():
             ('/detect/image_output_sub1/compressed', '/detect/image_white_lane_marker/compressed'),
             ('/detect/image_output_sub2', '/detect/image_yellow_lane_marker'),
             ('/detect/image_output_sub2/compressed', '/detect/image_yellow_lane_marker/compressed'),
-            ('/detect/image_output_sub3', '/detect/image_blue_lane_marker'),
-            ('/detect/image_output_sub3/compressed', '/detect/image_blue_lane_marker/compressed'),
+            ('/detect/image_output_sub3', '/detect/image_purple_lane_marker'),
+            ('/detect/image_output_sub3/compressed', '/detect/image_purple_lane_marker/compressed'),
         ]
     )
 

@@ -77,17 +77,17 @@ class DetectLane(Node):
                     parameter_descriptor_saturation_lightness),
                 ('detect.lane.yellow.lightness_h', 255,
                     parameter_descriptor_saturation_lightness),
-                ('detect.lane.blue.hue_l', 98,
+                ('detect.lane.purple.hue_l', 125,
                     parameter_descriptor_hue),
-                ('detect.lane.blue.hue_h', 112,
+                ('detect.lane.purple.hue_h', 150,
                     parameter_descriptor_hue),
-                ('detect.lane.blue.saturation_l', 127,
+                ('detect.lane.purple.saturation_l', 76,
                     parameter_descriptor_saturation_lightness),
-                ('detect.lane.blue.saturation_h', 255,
+                ('detect.lane.purple.saturation_h', 255,
                     parameter_descriptor_saturation_lightness),
-                ('detect.lane.blue.lightness_l', 76,
+                ('detect.lane.purple.lightness_l', 127,
                     parameter_descriptor_saturation_lightness),
-                ('detect.lane.blue.lightness_h', 255,
+                ('detect.lane.purple.lightness_h', 255,
                     parameter_descriptor_saturation_lightness),
                 ('is_detection_calibration_mode', False)
             ]
@@ -119,18 +119,18 @@ class DetectLane(Node):
         self.lightness_yellow_h = self.get_parameter(
             'detect.lane.yellow.lightness_h').get_parameter_value().integer_value
         
-        self.hue_blue_l = self.get_parameter(
-            'detect.lane.blue.hue_l').get_parameter_value().integer_value
-        self.hue_blue_h = self.get_parameter(
-            'detect.lane.blue.hue_h').get_parameter_value().integer_value
-        self.saturation_blue_l = self.get_parameter(
-            'detect.lane.blue.saturation_l').get_parameter_value().integer_value
-        self.saturation_blue_h = self.get_parameter(
-            'detect.lane.blue.saturation_h').get_parameter_value().integer_value
-        self.lightness_blue_l = self.get_parameter(
-            'detect.lane.blue.lightness_l').get_parameter_value().integer_value
-        self.lightness_blue_h = self.get_parameter(
-            'detect.lane.blue.lightness_h').get_parameter_value().integer_value
+        self.hue_purple_l = self.get_parameter(
+            'detect.lane.purple.hue_l').get_parameter_value().integer_value
+        self.hue_purple_h = self.get_parameter(
+            'detect.lane.purple.hue_h').get_parameter_value().integer_value
+        self.saturation_purple_l = self.get_parameter(
+            'detect.lane.purple.saturation_l').get_parameter_value().integer_value
+        self.saturation_purple_h = self.get_parameter(
+            'detect.lane.purple.saturation_h').get_parameter_value().integer_value
+        self.lightness_purple_l = self.get_parameter(
+            'detect.lane.purple.lightness_l').get_parameter_value().integer_value
+        self.lightness_purple_h = self.get_parameter(
+            'detect.lane.purple.lightness_h').get_parameter_value().integer_value
 
         self.is_calibration_mode = self.get_parameter(
             'is_detection_calibration_mode').get_parameter_value().bool_value
@@ -166,7 +166,7 @@ class DetectLane(Node):
                 self.pub_image_yellow_lane = self.create_publisher(
                     CompressedImage, '/detect/image_output_sub2/compressed', 1
                     )
-                self.pub_image_blue_lane = self.create_publisher(
+                self.pub_image_purple_lane = self.create_publisher(
                     CompressedImage, '/detect/image_output_sub3/compressed', 1
                     )
             elif self.pub_image_type == 'raw':
@@ -176,7 +176,7 @@ class DetectLane(Node):
                 self.pub_image_yellow_lane = self.create_publisher(
                     Image, '/detect/image_output_sub2', 1
                     )
-                self.pub_image_blue_lane = self.create_publisher(
+                self.pub_image_purple_lane = self.create_publisher(
                     Image, '/detect/image_output_sub3', 1
                     )
 
@@ -190,11 +190,11 @@ class DetectLane(Node):
             UInt8, '/detect/white_line_reliability', 1
             )
         
-        self.pub_blue_line_reliability = self.create_publisher(
-            UInt8, '/detect/blue_line_reliability', 1
+        self.pub_purple_line_reliability = self.create_publisher(
+            UInt8, '/detect/purple_line_reliability', 1
             )
 
-        self.pub_lane_changed_from_ytob = self.create_publisher(
+        self.pub_lane_changed_from_ytop = self.create_publisher(
             Bool, '/detect/lane_changed', 1
         )
 
@@ -209,7 +209,7 @@ class DetectLane(Node):
 
         self.reliability_white_line = 100
         self.reliability_yellow_line = 100
-        self.reliability_blue_line = 100
+        self.reliability_purple_line = 100
 
         self.mov_avg_left = np.empty((0, 3))
         self.mov_avg_right = np.empty((0, 3))
@@ -243,18 +243,18 @@ class DetectLane(Node):
                 self.lightness_yellow_l = param.value
             elif param.name == 'detect.lane.yellow.lightness_h':
                 self.lightness_yellow_h = param.value
-            elif param.name == 'detect.lane.blue.hue_l':
-                self.hue_blue_l = param.value
-            elif param.name == 'detect.lane.blue.hue_h':
-                self.hue_blue_h = param.value
-            elif param.name == 'detect.lane.blue.saturation_l':
-                self.saturation_blue_l = param.value
-            elif param.name == 'detect.lane.blue.saturation_h':
-                self.saturation_blue_h = param.value
-            elif param.name == 'detect.lane.blue.lightness_l':
-                self.lightness_blue_l = param.value
-            elif param.name == 'detect.lane.blue.lightness_h':
-                self.lightness_blue_h = param.value
+            elif param.name == 'detect.lane.purple.hue_l':
+                self.hue_purple_l = param.value
+            elif param.name == 'detect.lane.purple.hue_h':
+                self.hue_purple_h = param.value
+            elif param.name == 'detect.lane.purple.saturation_l':
+                self.saturation_purple_l = param.value
+            elif param.name == 'detect.lane.purple.saturation_h':
+                self.saturation_purple_h = param.value
+            elif param.name == 'detect.lane.purple.lightness_l':
+                self.lightness_purple_l = param.value
+            elif param.name == 'detect.lane.purple.lightness_h':
+                self.lightness_purple_h = param.value
             return SetParametersResult(successful=True)
 
     def cbFindLane(self, image_msg):
@@ -275,28 +275,28 @@ class DetectLane(Node):
 
         white_fraction, cv_white_lane = self.maskWhiteLane(cv_image)
         yellow_fraction, cv_yellow_lane = self.maskYellowLane(cv_image)
-        blue_fraction, cv_blue_lane = self.maskBlueLane(cv_image)
-        # self.get_logger().info(f'fraction: {[white_fraction, yellow_fraction, blue_fraction]}')
+        purple_fraction, cv_purple_lane = self.maskPurpleLane(cv_image)
+        self.get_logger().info(f'fraction: {[white_fraction, yellow_fraction, purple_fraction]}')
 
         try:
-            if blue_fraction > 3000:
+            if purple_fraction >= 3000:
                 self.left_fitx, self.left_fit = self.fit_from_lines(
-                    self.left_fit, cv_blue_lane)
+                    self.left_fit, cv_purple_lane)
                 self.mov_avg_left = np.append(
                     self.mov_avg_left, np.array([self.left_fit]), axis=0
                     )
-                changed_from_ytob = Bool()
-                changed_from_ytob.data = True
-                self.pub_lane_changed_from_ytob.publish(changed_from_ytob)
+                changed_from_ytop = Bool()
+                changed_from_ytop.data = True
+                self.pub_lane_changed_from_ytop.publish(changed_from_ytop)
             elif yellow_fraction > 3000:
                 self.left_fitx, self.left_fit = self.fit_from_lines(
                     self.left_fit, cv_yellow_lane)
                 self.mov_avg_left = np.append(
                     self.mov_avg_left, np.array([self.left_fit]), axis=0
                     )
-                changed_from_ytob = Bool()
-                changed_from_ytob.data = False
-                self.pub_lane_changed_from_ytob.publish(changed_from_ytob)
+                changed_from_ytop = Bool()
+                changed_from_ytop.data = False
+                self.pub_lane_changed_from_ytop.publish(changed_from_ytop)
 
             if white_fraction > 3000:
                 self.right_fitx, self.right_fit = self.fit_from_lines(
@@ -305,18 +305,18 @@ class DetectLane(Node):
                     self.mov_avg_right, np.array([self.right_fit]), axis=0
                     )
         except Exception:
-            if blue_fraction > 3000:
-                self.left_fitx, self.left_fit = self.sliding_windown(cv_blue_lane, 'left')
+            if purple_fraction >= 3000:
+                self.left_fitx, self.left_fit = self.sliding_windown(cv_purple_lane, 'left')
                 self.mov_avg_left = np.array([self.left_fit])
-                changed_from_ytob = Bool()
-                changed_from_ytob.data = True
-                self.pub_lane_changed_from_ytob.publish(changed_from_ytob)
+                changed_from_ytop = Bool()
+                changed_from_ytop.data = True
+                self.pub_lane_changed_from_ytop.publish(changed_from_ytop)
             elif yellow_fraction > 3000:
                 self.left_fitx, self.left_fit = self.sliding_windown(cv_yellow_lane, 'left')
                 self.mov_avg_left = np.array([self.left_fit])
-                changed_from_ytob = Bool()
-                changed_from_ytob.data = False
-                self.pub_lane_changed_from_ytob.publish(changed_from_ytob)
+                changed_from_ytop = Bool()
+                changed_from_ytop.data = False
+                self.pub_lane_changed_from_ytop.publish(changed_from_ytop)
 
             if white_fraction > 3000:
                 self.right_fitx, self.right_fit = self.sliding_windown(cv_white_lane, 'right')
@@ -457,30 +457,30 @@ class DetectLane(Node):
 
         return fraction_num, mask
     
-    def maskBlueLane(self, image):
+    def maskPurpleLane(self, image):
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-        Hue_l = self.hue_blue_l
-        Hue_h = self.hue_blue_h
-        Saturation_l = self.saturation_blue_l
-        Saturation_h = self.saturation_blue_h
-        Lightness_l = self.lightness_blue_l
-        Lightness_h = self.lightness_blue_h
+        Hue_l = self.hue_purple_l
+        Hue_h = self.hue_purple_h
+        Saturation_l = self.saturation_purple_l
+        Saturation_h = self.saturation_purple_h
+        Lightness_l = self.lightness_purple_l
+        Lightness_h = self.lightness_purple_h
 
-        lower_blue = np.array([Hue_l, Saturation_l, Lightness_l])
-        upper_blue = np.array([Hue_h, Saturation_h, Lightness_h])
+        lower_purple = np.array([Hue_l, Saturation_l, Lightness_l])
+        upper_purple = np.array([Hue_h, Saturation_h, Lightness_h])
 
-        mask = cv2.inRange(hsv, lower_blue, upper_blue)
+        mask = cv2.inRange(hsv, lower_purple, upper_purple)
 
         fraction_num = np.count_nonzero(mask)
 
         if self.is_calibration_mode:
             if fraction_num > 35000:
-                if self.lightness_blue_l < 250:
-                    self.lightness_blue_l += 20
+                if self.lightness_purple_l < 250:
+                    self.lightness_purple_l += 20
             elif fraction_num < 5000:
-                if self.lightness_blue_l > 90:
-                    self.lightness_blue_l -= 20
+                if self.lightness_purple_l > 90:
+                    self.lightness_purple_l -= 20
 
         how_much_short = 0
 
@@ -491,24 +491,24 @@ class DetectLane(Node):
         how_much_short = 600 - how_much_short
 
         if how_much_short > 100:
-            if self.reliability_blue_line >= 5:
-                self.reliability_blue_line -= 5
+            if self.reliability_purple_line >= 5:
+                self.reliability_purple_line -= 5
         elif how_much_short <= 100:
-            if self.reliability_blue_line <= 99:
-                self.reliability_blue_line += 5
+            if self.reliability_purple_line <= 99:
+                self.reliability_purple_line += 5
 
-        msg_blue_line_reliability = UInt8()
-        msg_blue_line_reliability.data = self.reliability_blue_line
-        self.pub_blue_line_reliability.publish(msg_blue_line_reliability)
+        msg_purple_line_reliability = UInt8()
+        msg_purple_line_reliability.data = self.reliability_purple_line
+        self.pub_purple_line_reliability.publish(msg_purple_line_reliability)
 
         if self.is_calibration_mode:
             if self.pub_image_type == 'compressed':
-                self.pub_image_blue_lane.publish(
+                self.pub_image_purple_lane.publish(
                     self.cvBridge.cv2_to_compressed_imgmsg(mask, 'jpg')
                     )
 
             elif self.pub_image_type == 'raw':
-                self.pub_image_blue_lane.publish(
+                self.pub_image_purple_lane.publish(
                     self.cvBridge.cv2_to_imgmsg(mask, 'bgr8')
                     )
 
